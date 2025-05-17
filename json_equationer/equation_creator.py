@@ -2,9 +2,9 @@ import re
 import json
 
 try:
-    from json_equationer.evaluator import evaluate_equation_dict
+    from json_equationer.equation_evaluator import evaluate_equation_dict
 except:
-    from evaluator import evaluate_equation_dict
+    from equation_evaluator import evaluate_equation_dict
 
 class Equation:
     def __init__(self):
