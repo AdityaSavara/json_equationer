@@ -7,7 +7,34 @@ except:
     from equation_evaluator import evaluate_equation_dict
 
 class Equation:
-    def __init__(self):
+    """
+    A class to manage mathematical equations with units and to evaluate them.
+    Provides utilities for evaluating, formatting, exporting, and printing.
+   
+    Initialization:
+    - Normally, should be initialized as a blank dict object like example_Arrhenius = Equation().
+    - Defaults to an empty equation with predefined structure.
+    - Accepts an optional dictionary (`initial_dict`) to prepopulate the equation dictionary.
+
+    Example Usage:
+    ```
+    custom_dict = {
+        'equation_string': "k = A * (e ** (-Ea / (R * T)))",
+        'x_variable': "T (K)",
+        'y_variable': "k (s**-1)",
+        'constants': {"Ea": "30000 J/mol", "R": "8.314 J/(mol*K)", "A": "1*10**13 (s**-1)", "e": "2.71828"},
+        'num_of_points': 10,
+        'x_range_default': [200, 500],
+        'x_range_limits': [None, 600],
+        'points_spacing': "Linear"
+    }
+
+    equation_instance = Equation(initial_dict=custom_dict)
+    print(equation_instance.get_equation_dict())
+    ```
+    """
+
+    def __init__(self, initial_dict={}):
         """Initialize an empty equation dictionary."""
         self.equation_dict = {
             'equation_string': '',
@@ -21,6 +48,13 @@ class Equation:
             'points_spacing': '',
             'reverse_scaling': False
         }
+
+        # If a dictionary is provided, update the default values
+        if len(initial_dict)>0:
+            if isinstance(initial_dict, dict):
+                self.equation_dict.update(initial_dict)
+            else:
+                raise TypeError("initial_dict must be a dictionary.")
 
     def validate_unit(self, value):
         """Ensure that the value is either a pure number or contains a unit."""
