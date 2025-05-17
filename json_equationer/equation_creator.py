@@ -16,7 +16,7 @@ class Equation:
     - Defaults to an empty equation with predefined structure.
     - Accepts an optional dictionary (`initial_dict`) to prepopulate the equation dictionary.
 
-    Example Usage:
+    Example structure:
     ```
     custom_dict = {
         'equation_string': "k = A * (e ** (-Ea / (R * T)))",
@@ -30,7 +30,6 @@ class Equation:
     }
 
     equation_instance = Equation(initial_dict=custom_dict)
-    print(equation_instance.get_equation_dict())
     ```
     """
 
