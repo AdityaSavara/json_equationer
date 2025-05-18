@@ -16,7 +16,7 @@ from setuptools import find_packages, setup, Command
 # Package meta-data.
 NAME = 'json_equationer'
 DESCRIPTION = 'A package for creating json equation records and evaluating them.'
-URL = 'https://github.com/AdityaSavara/jsongrapher-py'
+URL = 'https://github.com/AdityaSavara/json_equationer'
 EMAIL = 'AditySavara2008@u.northwestern.edu'  
 AUTHOR = 'Aditya Savara'
 REQUIRES_PYTHON = '>=3.0.0'
