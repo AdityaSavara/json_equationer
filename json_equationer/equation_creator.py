@@ -3,8 +3,11 @@ import json
 
 try:
     from json_equationer.equation_evaluator import evaluate_equation_dict
-except:
-    from equation_evaluator import evaluate_equation_dict
+except:  
+    try:
+        from .equation_evaluator import evaluate_equation_dict
+    except:
+        from equation_evaluator import evaluate_equation_dict
 
 class Equation:
     """
