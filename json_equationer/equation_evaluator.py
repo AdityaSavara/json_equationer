@@ -354,16 +354,18 @@ def generate_points_from_range_dict(range_dict):
     """
     # Assigning range. 
     # Start with default values
-    if range_dict.get('x_range_default'): #get prevents crashing if the field is not present.
+    if range_dict.get('x_range_default'):  #get prevents crashing if the field is not present.
         range_min, range_max = range_dict['x_range_default']
 
-    # If 'x_range_limits' is provided, update values where applicable
+    # If 'x_range_limits' is provided, update values only if they narrow the range
     if range_dict.get('x_range_limits'):
         limit_min, limit_max = range_dict['x_range_limits']
-        if limit_min is not None:
+        # Apply limits only if they tighten the range
+        if limit_min is not None and limit_min > range_min:
             range_min = limit_min
-        if limit_max is not None:
+        if limit_max is not None and limit_max < range_max:
             range_max = limit_max
+
 
     # Ensure at least one valid limit exists
     if range_min is None or range_max is None:
