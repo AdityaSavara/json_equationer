@@ -1,6 +1,5 @@
 from sympy import symbols, Eq, solve, sympify
 from pint import UnitRegistry
-import json
 import re
 
 ureg = UnitRegistry()
@@ -33,7 +32,7 @@ def parse_equation(equation_str, variables):
                 quantity = ureg(f"{magnitude} {unit}")  # Convert to Pint quantity
                 formatted_unit = str(quantity.units)
                 equation_str = equation_str.replace(f"{magnitude} {unit}", f"({quantity.magnitude} * {formatted_unit})")
-            except:
+            except: #This comment is so that VS code pylint will not flag this line: pylint: disable=bare-except
                 pass  # Ignore invalid unit conversions
         return equation_str
 
@@ -41,9 +40,9 @@ def parse_equation(equation_str, variables):
     # Sort variable names by length in descending order
     variables_sorted_by_name = sorted(variables.items(), key=lambda x: -len(x[0]))
 
-    # Need to first replace the constants because they could be like "letter e"  
-    # and could mess up the string after the units are added in.  
-    # Also need to sort them by length and replace longer ones first because  
+    # Need to first replace the constants because they could be like "letter e"
+    # and could mess up the string after the units are added in.
+    # Also need to sort them by length and replace longer ones first because
     # we could have "Ea" and "a", for example.  
     for var_name, var_value in variables_sorted_by_name:  # Removed `.items()`
         if not hasattr(var_value, "magnitude"):  # For constants like "e" with no units  
@@ -400,7 +399,6 @@ def return_custom_units_markup(units_string, custom_units_list):
 def extract_tagged_strings(text):
     """Extracts tags surrounded by <> from a given string. Used for custom units.
        returns them as a list sorted from longest to shortest"""
-    import re
     list_of_tags = re.findall(r'<(.*?)>', text)
     set_of_tags = set(list_of_tags)
     sorted_tags = sorted(set_of_tags, key=len, reverse=True)
@@ -414,7 +412,6 @@ def extract_tagged_strings(text):
 #It was written by copilot and refined by further prompting of copilot by testing.
 #The depth is because the function works iteratively and then stops when finished.
 def convert_inverse_units(expression, depth=100):
-    import re
     # Patterns to match valid reciprocals while ignoring multiplied units, so (1/bar)*bar should be  handled correctly.
     patterns = [r"1/\((1/.*?)\)", r"1/([a-zA-Z]+)"]
     for _ in range(depth):
@@ -431,7 +428,7 @@ def convert_inverse_units(expression, depth=100):
 #This support function is just for code readability.
 #It returnts two strings in a list, split at the first delimiter.
 def split_at_first_delimiter(string, delimter=" "):
-    return string.split(" ", 1)
+    return string.split(delimter, 1)
 
 #This function takes an equation dict (see examples) and returns the x_points, y_points, and x_units and y_units.
 #If there is more than one solution (like in a circle, for example) all solutions should be returned.
@@ -445,14 +442,15 @@ def evaluate_equation_dict(equation_dict):
     #First a block of code to extract the x_points needed
     # Extract each dictionary key as a local variable
     equation_string = equation_dict['equation_string']
-    x_variable = equation_dict['x_variable']
-    y_variable = equation_dict['y_variable']
-    constants = equation_dict['constants']
-    reverse_scaling = equation_dict['reverse_scaling']
+    # We don't need the below variables, because they are in the equation_dict.
+    # x_variable = equation_dict['x_variable']
+    # y_variable = equation_dict['y_variable']
+    # constants = equation_dict['constants']
+    # reverse_scaling = equation_dict['reverse_scaling']
     x_points = generate_points_from_range_dict(range_dict = equation_dict)
     #Now get the various variables etc.
     independent_variables_dict, constants_extracted_dict, equation_extracted_dict, x_variable_extracted_dict, y_variable_extracted_dict = parse_equation_dict(equation_dict=equation_dict)
-    
+    constants_extracted_dict, equation_extracted_dict #These will not be used. The rest of this comment is to avoid a vs code pylint flag. # pylint: disable=unused-variable, disable=pointless-statement
     #Start of block to check for any custom units and add them to the ureg if necessary.
     custom_units_list = []
     for constant_entry_key in independent_variables_dict.keys():
@@ -487,7 +485,7 @@ def evaluate_equation_dict(equation_dict):
     #The full list of independent variables includes the x_variable and the independent_variables
     independent_variables = list(independent_variables_dict.keys())#.append(x_variable_extracted_dict['label'])
     independent_variables.append(x_variable_extracted_dict['label'])
-    x_variable_extracted_dict["label"]
+    #x_variable_extracted_dict["label"]
     x_y_pairs = [] #can't just keep y_points, because there could be more than one solution.
     y_units = ''#just initializing.
     for x_point in x_points:
@@ -532,13 +530,8 @@ def evaluate_equation_dict(equation_dict):
     evaluated_dict['y_points'] = y_points
     return evaluated_dict
 
-import numpy as np
-
-
-
-
 if __name__ == "__main__":
-    equation_dict = {
+    example_equation_dict = {
         'equation_string': 'k = A*(e**((-Ea)/(R*T)))',
         'x_variable': 'T (K)',  
         'y_variable': 'k (s**(-1))',
@@ -551,6 +544,5 @@ if __name__ == "__main__":
         'reverse_scaling' : False
     }
 
-    evaluated_dict = evaluate_equation_dict(equation_dict)
-    print(evaluated_dict)
-
+    example_evaluated_dict = evaluate_equation_dict(example_equation_dict)
+    print(example_evaluated_dict)

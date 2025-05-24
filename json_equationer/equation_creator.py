@@ -3,11 +3,12 @@ import json
 
 try:
     from json_equationer.equation_evaluator import evaluate_equation_dict
-except:  
+except ImportError:
     try:
         from .equation_evaluator import evaluate_equation_dict
-    except:
+    except ImportError:
         from equation_evaluator import evaluate_equation_dict
+
 
 class Equation:
     """
@@ -30,14 +31,17 @@ class Equation:
         'x_range_default': [200, 500],
         'x_range_limits': [None, 600],
         'points_spacing': "Linear"
+        'dimensionality': 2
     }
 
     equation_instance = Equation(initial_dict=custom_dict)
     ```
     """
 
-    def __init__(self, initial_dict={}):
+    def __init__(self, initial_dict=None):
         """Initialize an empty equation dictionary."""
+        if initial_dict==None:
+            initial_dict = {}
         self.equation_dict = {
             'equation_string': '',
             'x_variable': '',  
@@ -48,7 +52,8 @@ class Equation:
             'x_range_limits': [None, None],  # Allows None for either limit.
             'x_points_specified': [],
             'points_spacing': '',
-            'reverse_scaling': False
+            'reverse_scaling': False,
+            'dimensionality' : 0
         }
 
         # If a dictionary is provided, update the default values
@@ -144,8 +149,7 @@ class Equation:
         self.equation_dict["y_units"] = evaluated_dict["y_units"]
         self.equation_dict["x_points"] = evaluated_dict["x_points"]
         self.equation_dict["y_points"] = evaluated_dict["y_points"]
-
-        
+      
         if remove_equation_fields == True:
             #we'll just make a fresh dictionary for simplicity, in this case.
             equation_dict = {}
@@ -186,7 +190,7 @@ class Equation:
         equation_dict = self.equation_dict #populate a variable internal to this function.
         #if evaluate_equation is true, we'll try to simulate any series that need it, then clean the simulate fields out if requested.
         if evaluate_equation == True:
-            evaluated_dict = self.evaluate_equation(self, remove_equation_field = False) #For this function, we don't want to remove equation fields from the object, just the export.
+            evaluated_dict = self.evaluate_equation(remove_equation_fields = remove_equation_fields) #For this function, we don't want to remove equation fields from the object, just the export.
             equation_dict = evaluated_dict
         if remove_equation_fields == True:
             equation_dict = {}
@@ -230,8 +234,8 @@ if __name__ == "__main__":
     example_Arrhenius.equation_dict["points_spacing"] = "Linear"
 
     # Retrieve and display the equation dictionary
-    equation_dict = example_Arrhenius.get_equation_dict()
-    print(equation_dict)
+    example_equation_dict = example_Arrhenius.get_equation_dict()
+    print(example_equation_dict)
 
     example_Arrhenius.evaluate_equation()
     example_Arrhenius.print_equation_dict()
