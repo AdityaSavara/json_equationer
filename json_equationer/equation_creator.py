@@ -102,6 +102,14 @@ class Equation:
         """
         self.equation_dict["y_variable"] = y_variable
 
+    def set_z_variable(self, z_variable):
+        """
+        Set the z-variable in the equation dictionary.
+        Expected format: A descriptive string including the variable name and its unit.
+        Example: "E (J)" for energy with joules as the unit.
+        """
+        self.equation_dict["z_variable"] = z_variable
+
     def set_x_range_default(self, x_range):
         """
         Set the default x range.
@@ -124,6 +132,50 @@ class Equation:
         if not all(isinstance(i, (int, float)) or i is None for i in x_limits):
             raise ValueError("Elements in x_limits must be numeric or None.")
         self.equation_dict['x_range_limits'] = x_limits
+
+    def set_y_range_default(self, y_range):
+        """
+        Set the default y range.
+        Expected format: A list of two numeric values representing the range boundaries.
+        Example: set_y_range([0, 100]) for a percentage scale.
+        """
+        if not (isinstance(y_range, list) and len(y_range) == 2 and all(isinstance(i, (int, float)) for i in y_range)):
+            raise ValueError("y_range must be a list of two numeric values.")
+        self.equation_dict['y_range_default'] = y_range
+
+    def set_y_range_limits(self, y_limits):
+        """
+        Set the hard limits for y values.
+        Expected format: A list of two values (numeric or None) defining absolute boundaries.
+        Example: set_y_range_limits([None, 50]) allows an open lower limit but restricts the upper limit.
+        """
+        if not (isinstance(y_limits, list) and len(y_limits) == 2):
+            raise ValueError("y_limits must be a list of two elements (numeric or None).")
+        if not all(isinstance(i, (int, float)) or i is None for i in y_limits):
+            raise ValueError("Elements in y_limits must be numeric or None.")
+        self.equation_dict['y_range_limits'] = y_limits
+
+    def set_z_range_default(self, z_range):
+        """
+        Set the default z range.
+        Expected format: A list of two numeric values representing the range boundaries.
+        Example: set_z_range([0, 5000]) for energy values in Joules.
+        """
+        if not (isinstance(z_range, list) and len(z_range) == 2 and all(isinstance(i, (int, float)) for i in z_range)):
+            raise ValueError("z_range must be a list of two numeric values.")
+        self.equation_dict['z_range_default'] = z_range
+
+    def set_z_range_limits(self, z_limits):
+        """
+        Set the hard limits for z values.
+        Expected format: A list of two values (numeric or None) defining absolute boundaries.
+        Example: set_z_range_limits([100, None]) allows an open upper limit but restricts the lower boundary.
+        """
+        if not (isinstance(z_limits, list) and len(z_limits) == 2):
+            raise ValueError("z_limits must be a list of two elements (numeric or None).")
+        if not all(isinstance(i, (int, float)) or i is None for i in z_limits):
+            raise ValueError("Elements in z_limits must be numeric or None.")
+        self.equation_dict['z_range_limits'] = z_limits
 
     def set_num_of_points(self, num_points):
         """
