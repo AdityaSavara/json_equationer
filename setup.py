@@ -20,7 +20,7 @@ URL = 'https://github.com/AdityaSavara/json_equationer'
 EMAIL = 'AdityaSavara2008@u.northwestern.edu'  
 AUTHOR = 'Aditya Savara'
 REQUIRES_PYTHON = '>=3.0.0'
-VERSION = '2.1'
+VERSION = '2.2'
 LICENSE = 'Unlicense'
 
 # What packages are required for this module to be executed?
